@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const VoteApp = () => {
+const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -14,8 +14,6 @@ const VoteApp = () => {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState([0,0,0,0,0,0,0]);
-  console.log("selected after definition", selected);
-  console.log("votes after definition", votes);
   
   const min = 0;
   const max = anecdotes.length;
@@ -29,13 +27,9 @@ const VoteApp = () => {
   }
 
   const handleVoteClick = (index) => {  
-  // debugger;
-  console.log(index);
-  console.log(votes);
-  const copy = [...votes];
-  copy[index]++;
-  setVotes(copy);
-    //debugger;
+    const copy = [...votes];
+    copy[index]++;
+    setVotes(copy);
   }
 
   const mostVotesIndex = votes.indexOf(Math.max(...votes));
@@ -58,7 +52,7 @@ const VoteApp = () => {
 
   return (
     <div>
-      <h1>Anecdote voting app</h1>
+      <h1>Anecdote of the day</h1>
       <p>
         {anecdotes[selected]} <br/>
         has {votes[selected]} votes
@@ -66,11 +60,11 @@ const VoteApp = () => {
       <button onClick = {() => handleVoteClick(selected)} >Vote</button>
       <Button handleClick={handleAnecdoteClick} text = "next anecdote" />
       
-      <h3>Anecdote with most votes</h3>
+      <h1>Anecdote with most votes</h1>
       <p>{anecdotes[mostVotesIndex]}</p>
       <p>{votes[mostVotesIndex]} votes</p>
     </div>
   )
 }
 
-export default VoteApp
+export default App
