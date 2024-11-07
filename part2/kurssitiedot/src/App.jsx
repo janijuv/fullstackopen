@@ -1,6 +1,5 @@
 import React from "react";
 import Course from './components/Course'
-import Total from "./components/Total";
 
 const App = () => {
   const courses = [
@@ -62,14 +61,13 @@ const App = () => {
     </div>
     }
 );*/
-
   return (
     <div>
       <p>Courses</p>
-      <p>{console.log(courses[0].parts[0])}</p>
-      {courses.map(course => {
-        <p>{console.log(course)}</p>
-      }
+      <p>jani</p>
+      {courses.map(course => (
+        <Course key={course.id} course={course}/>
+      )
       )
     }
     </div>
