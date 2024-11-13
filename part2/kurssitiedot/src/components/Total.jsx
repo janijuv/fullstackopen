@@ -1,4 +1,8 @@
 const Total = ({total}) => {
-    return 'total of ' + total + ' exercises';
+    return (
+        <div>
+            <p><b>total of {total} exercises</b></p>
+        </div>
+    );
 }
 export default Total

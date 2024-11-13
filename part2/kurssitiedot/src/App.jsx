@@ -46,25 +46,10 @@ const App = () => {
       ]
     } 
   ]
-
-/*const total = course.parts
-    .map(course => course.exercises)
-    .reduce((sum, current)=> {
-      return sum + current;
-}*/
-
-/*const course = courses.map(course => {
-    console.log("COURSE: " , course);
-    <div>;
-      <p>asdfaffa</p>
-    <Course course = {course} />
-    </div>
-    }
-);*/
+  
   return (
     <div>
-      <p>Courses</p>
-      <p>jani</p>
+      <h2>Web development curriculum</h2>
       {courses.map(course => (
         <Course key={course.id} course={course}/>
       )
