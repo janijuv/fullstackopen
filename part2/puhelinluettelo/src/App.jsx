@@ -3,6 +3,7 @@ import axios from 'axios'
 import EntryAdder from './components/EntryAdder/EntryAdder.jsx'
 import Filtering from './components/Filtering/Filtering.jsx'
 import Numbers from './components/Numbers/Numbers.jsx'
+import PersonService from './services/persons.jsx' 
 
 const App = () => {
   const [newName, setNewName] = useState('');
@@ -14,6 +15,8 @@ const App = () => {
       .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data);
+        setNewName('');
+        setNewNumber('');
       })
   }, [])
   const [showAll, setShowAll] = useState(true);
@@ -22,7 +25,6 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
-    console.log("addname", event.target.value);
     if (persons.find(p => p.name === newName && p.number === newNumber)) {
       window.alert(`${newName} with number ${newNumber} is already added to phonebook`);
     } else {
@@ -32,20 +34,19 @@ const App = () => {
         number: newNumber,
         id: String(persons.length + 1)
       }
-      console.log("setPersons");
-      setPersons(persons.concat(personObject));
+      PersonService.create(personObject)
+        .then(response => {
+          setPersons(persons.concat(personObject));
+        })
+      setNewName('');
+      setNewNumber('');
     }
-    setNewName('');
-    setNewNumber('');
   }
-
   const handleNameChange = (event) => {
-    console.log("new name ", event.target.value);
     setNewName(event.target.value);
   }
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
-    console.log("handleNumberchange", event.target.value);
   }
 
   const handleFiltering = (event) => {
@@ -73,6 +74,7 @@ const App = () => {
       <EntryAdder
         addName={addName}
         newName={newName}
+        newNumber={newNumber}
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
       />
