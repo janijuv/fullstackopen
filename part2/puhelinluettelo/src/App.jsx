@@ -28,7 +28,6 @@ const App = () => {
     if (persons.find(p => p.name === newName && p.number === newNumber)) {
       window.alert(`${newName} with number ${newNumber} is already added to phonebook`);
     } else {
-      console.log("newnumber", newNumber);
       const personObject = {
         name: newName,
         number: newNumber,
@@ -42,10 +41,25 @@ const App = () => {
       setNewNumber('');
     }
   }
+
+  const deleteEntry = (event) => {
+    event.preventDefault();
+    console.log("delete entry ", event.target.id);
+    PersonService.deleteEntry(event.target.id)
+      .then(response => {
+        const newPersons = response.data.filter(person => person.id !== id);
+        console.log("newPersons:", newPersons);
+        setPersons(newPersons);
+
+      })
+  }
+
   const handleNameChange = (event) => {
+    console.log("new name ", event.target.value);
     setNewName(event.target.value);
   }
   const handleNumberChange = (event) => {
+    console.log("new number", event.target.value);
     setNewNumber(event.target.value);
   }
 
@@ -80,7 +94,11 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Numbers showAll={showAll} persons={persons} filteredPersons={filteredPersons} />
+      <Numbers 
+        showAll={showAll} 
+        persons={persons} 
+        filteredPersons={filteredPersons}
+        deleteEntry={deleteEntry} />
     </div>
   )
 
