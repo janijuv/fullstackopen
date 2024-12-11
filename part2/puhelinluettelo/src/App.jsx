@@ -44,6 +44,7 @@ const App = () => {
 
   const deleteEntry = (event) => {
     event.preventDefault();
+    if (window.confirm("Delete " + event.target.name + "?")) {
     PersonService.delete(event.target.id)
       .then(response => {
         const responseData = response.data;
@@ -52,6 +53,7 @@ const App = () => {
       }).catch(error => {
         console.log("ERROR:", error);
       });
+    }
   }
   
   const handleNameChange = (event) => {

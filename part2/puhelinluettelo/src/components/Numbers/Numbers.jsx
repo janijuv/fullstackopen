@@ -11,7 +11,7 @@ const Numbers = ({
             ? persons.map(person =>            
                 <span key={person.id}>
                   <li key={person.id}>{person.name} {person.number}</li>
-                  <button onClick={deleteEntry} id={person.id}>delete</button>
+                  <button onClick={deleteEntry} id={person.id} name={person.name}>delete</button>
                 </span>
               
             )
