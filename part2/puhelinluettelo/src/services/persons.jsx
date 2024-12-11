@@ -6,14 +6,7 @@ const createPerson = personObject => {
 }
 
 const deletePerson = id => {
-    const request = axios.delete(`baseUrl/${id}`);
-    request.then(() => {
-      const newPersons = data.filter(item => item.id !==id);
-      setPersons(newPersons);
-    })
-    .catch(error => {
-      console.log("ERROR:", error);
-    });
+    return axios.delete(baseUrl + "/" + id);
 }
 
 export default {

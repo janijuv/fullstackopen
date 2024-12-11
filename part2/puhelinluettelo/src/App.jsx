@@ -44,16 +44,16 @@ const App = () => {
 
   const deleteEntry = (event) => {
     event.preventDefault();
-    console.log("delete entry ", event.target.id);
-    PersonService.deleteEntry(event.target.id)
+    PersonService.delete(event.target.id)
       .then(response => {
-        const newPersons = response.data.filter(person => person.id !== id);
-        console.log("newPersons:", newPersons);
+        const responseData = response.data;
+        const newPersons = persons.filter(person => person.id !== responseData.id);
         setPersons(newPersons);
-
-      })
+      }).catch(error => {
+        console.log("ERROR:", error);
+      });
   }
-
+  
   const handleNameChange = (event) => {
     console.log("new name ", event.target.value);
     setNewName(event.target.value);
