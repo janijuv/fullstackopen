@@ -31,6 +31,8 @@ const App = () => {
       if (existingNumber) {
         window.alert(`${newName} with number ${newNumber} is already added to phonebook`);
       } else {
+        const conf = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
+        if (!conf) {return false}
         const personObject = {
           name: existingPerson.name,
           number: newNumber,
@@ -40,7 +42,9 @@ const App = () => {
           .then(response => {
             setPersons(
               persons.map(person => person.id !== response.data.id ? person : response.data))
-            })
+            })       
+        setNewName('');
+        setNewNumber('');
       }
     } else {
       const personObject = {
@@ -52,8 +56,6 @@ const App = () => {
         .then(response => {
           setPersons(persons.concat(personObject));
         })
-      setNewName('');
-      setNewNumber('');
     }
   }
 
