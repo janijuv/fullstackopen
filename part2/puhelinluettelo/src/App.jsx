@@ -3,7 +3,7 @@ import axios from 'axios'
 import EntryAdder from './components/EntryAdder/EntryAdder.jsx'
 import Filtering from './components/Filtering/Filtering.jsx'
 import Numbers from './components/Numbers/Numbers.jsx'
-import PersonService from './services/persons.jsx' 
+import PersonService from './services/persons.jsx'
 
 const App = () => {
   const [newName, setNewName] = useState('');
@@ -12,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/persons')
+      .get('http://localhost:3001/api/persons')
       .then(response => {
         setPersons(response.data);
         setNewName('');
@@ -34,27 +34,26 @@ const App = () => {
         const conf = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
         if (!conf) {return false}
         const personObject = {
+          id: existingPerson.id,
           name: existingPerson.name,
-          number: newNumber,
-          id: existingPerson.id
+          number: newNumber
         }
         PersonService.update(personObject)
           .then(response => {
             setPersons(
               persons.map(person => person.id !== response.data.id ? person : response.data))
-            })       
+            })    
         setNewName('');
         setNewNumber('');
       }
     } else {
       const personObject = {
         name: newName,
-        number: newNumber,
-        id: String(persons.length + 1)
+        number: newNumber
       }
       PersonService.create(personObject)
         .then(response => {
-          setPersons(persons.concat(personObject));
+          setPersons(persons.concat(response.data));
         })
     }
   }

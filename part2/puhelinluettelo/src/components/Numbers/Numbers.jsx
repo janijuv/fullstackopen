@@ -1,6 +1,7 @@
 const Numbers = ({ 
   showAll, 
   persons,
+  filteredPersons,
   deleteEntry
   }) => {
     console.log("Persons:", persons)
