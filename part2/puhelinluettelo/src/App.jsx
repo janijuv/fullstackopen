@@ -3,12 +3,14 @@ import axios from 'axios'
 import EntryAdder from './components/EntryAdder/EntryAdder.jsx'
 import Filtering from './components/Filtering/Filtering.jsx'
 import Numbers from './components/Numbers/Numbers.jsx'
+import Notification from './components/Notification/Notification.jsx'
 import PersonService from './services/persons.jsx'
 
 const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [persons, setPersons] = useState([]);
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     axios
@@ -29,7 +31,7 @@ const App = () => {
     const existingNumber = persons.find(p => p.number === newNumber)
     if (existingPerson) {
       if (existingNumber) {
-        window.alert(`${newName} with number ${newNumber} is already added to phonebook`);
+        window.alert(`Person with number ${newNumber} is already added to phonebook`);
       } else {
         const conf = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`);
         if (!conf) {return false}
@@ -42,9 +44,11 @@ const App = () => {
           .then(response => {
             setPersons(
               persons.map(person => person.id !== response.data.id ? person : response.data))
-            })    
-        setNewName('');
-        setNewNumber('');
+            })
+        setNotificationMessage(`Updated ${newName}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
       }
     } else {
       const personObject = {
@@ -55,20 +59,34 @@ const App = () => {
         .then(response => {
           setPersons(persons.concat(response.data));
         })
+        setNotificationMessage(`Added ${newName}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
     }
+    setNewName('');
+    setNewNumber('');
   }
 
   const deleteEntry = (event) => {
     event.preventDefault();
     if (window.confirm("Delete " + event.target.name + "?")) {
-    PersonService.delete(event.target.id)
+      PersonService.delete(event.target.id)
       .then(response => {
-        const responseData = response.data;
-        const newPersons = persons.filter(person => person.id !== responseData.id);
-        setPersons(newPersons);
-      }).catch(error => {
+        PersonService
+          .getAll()
+          .then(response => {
+          setPersons(response.data)
+        }).then(() => {
+        setNotificationMessage(`deleted ${event.target.name}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      })
+    })
+    .catch(error => {
         console.log("ERROR:", error);
-      });
+    });
     }
   }
   
@@ -92,12 +110,12 @@ const App = () => {
       setFilteredPersons(filteredPersons);
       console.log(filteredPersons);
     }
-
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filtering
         setShowAll={setShowAll}
         handle={handleFiltering}
